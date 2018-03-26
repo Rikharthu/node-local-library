@@ -1,7 +1,18 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const Author = require("./../data/models/author");
-const Story = require("./../data/models/story");
+var authorSchema = Schema({
+  name: String,
+  stories: [{ type: Schema.Types.ObjectId, ref: "Story" }]
+});
+
+var storySchema = Schema({
+  author: { type: Schema.Types.ObjectId, ref: "Author" },
+  title: String
+});
+
+var Story = mongoose.model("Story", storySchema);
+var Author = mongoose.model("Author", authorSchema);
 
 const connectionString = "mongodb://localhost:27017/playground";
 
@@ -43,6 +54,7 @@ A better way is to get the _id of our author, then use find() to search for this
 */
 Story.find({ author: bob._id }).exec((err, stories) => {
   if (err) return handleError(err);
+  console.log(`Bob\'s stories: ${stories}`);
 });
 
 Story.findOne({ title: "Bob goes sledding" })
@@ -50,6 +62,7 @@ Story.findOne({ title: "Bob goes sledding" })
   .exec((err, story) => {
     if (err) return handleError(err);
     console.log(`The author is ${story.author.name}`);
+    console.log(`The story object is ${story}`);
   });
 
 function handleError(err) {

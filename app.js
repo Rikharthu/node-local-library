@@ -6,6 +6,7 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 
 var index = require("./routes/index");
+var catalog = require("./routes/catalog");
 var users = require("./routes/users");
 
 var app = express();
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", index);
 app.use("/users", users);
+app.use("/catalog", catalog);
 
 // Nothing handled request -> it's 404
 // catch 404 and forward to error handler
